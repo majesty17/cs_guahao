@@ -124,7 +124,7 @@ namespace cs_guahao
                 JsonData notice = guahao.hospital_notice(hoscode);
                 textBox_hos_detail.Clear();
                 try {
-                    textBox_hos_detail.Text = notice["data"]["content"].ToString().Replace("\n", System.Environment.NewLine);
+                    textBox_hos_detail.Text = notice["data"]["content"].ToString().Replace("\n", Environment.NewLine);
                 }
                 catch(Exception ex)
                 {
@@ -139,6 +139,23 @@ namespace cs_guahao
                 return;
             }
 
+        }
+        /// <summary>
+        /// 获取就诊人
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button_get_patient_Click(object sender, EventArgs e)
+        {
+            textBox_patient_list.Clear();
+            JsonData data = guahao.patient_list();
+            int ct = int.Parse(data["data"]["count"].ToString());
+            foreach(JsonData person in data["data"]["list"])
+            {
+                textBox_patient_list.AppendText(person["patientName"].ToString());
+                textBox_patient_list.AppendText(Environment.NewLine);
+            }
+            set_status(ct + "就诊人找到!");
         }
     }
 }

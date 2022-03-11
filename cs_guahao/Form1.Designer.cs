@@ -30,6 +30,8 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.textBox_hos_detail = new System.Windows.Forms.TextBox();
+            this.treeView_dept = new System.Windows.Forms.TreeView();
             this.listView_hos_list = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -40,12 +42,14 @@
             this.button_search = new System.Windows.Forms.Button();
             this.textBox_kw = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.textBox_patient_list = new System.Windows.Forms.TextBox();
+            this.button_get_patient = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.treeView_dept = new System.Windows.Forms.TreeView();
-            this.textBox_hos_detail = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,6 +59,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -77,6 +82,21 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "检索";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // textBox_hos_detail
+            // 
+            this.textBox_hos_detail.Location = new System.Drawing.Point(512, 37);
+            this.textBox_hos_detail.Multiline = true;
+            this.textBox_hos_detail.Name = "textBox_hos_detail";
+            this.textBox_hos_detail.Size = new System.Drawing.Size(330, 591);
+            this.textBox_hos_detail.TabIndex = 11;
+            // 
+            // treeView_dept
+            // 
+            this.treeView_dept.Location = new System.Drawing.Point(848, 37);
+            this.treeView_dept.Name = "treeView_dept";
+            this.treeView_dept.Size = new System.Drawing.Size(388, 591);
+            this.treeView_dept.TabIndex = 10;
             // 
             // listView_hos_list
             // 
@@ -180,10 +200,39 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1020, 543);
+            this.tabPage2.Size = new System.Drawing.Size(1244, 634);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.textBox_patient_list);
+            this.tabPage3.Controls.Add(this.button_get_patient);
+            this.tabPage3.Location = new System.Drawing.Point(4, 25);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(1244, 634);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "就诊人信息";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // textBox_patient_list
+            // 
+            this.textBox_patient_list.Location = new System.Drawing.Point(8, 47);
+            this.textBox_patient_list.Multiline = true;
+            this.textBox_patient_list.Name = "textBox_patient_list";
+            this.textBox_patient_list.Size = new System.Drawing.Size(327, 169);
+            this.textBox_patient_list.TabIndex = 1;
+            // 
+            // button_get_patient
+            // 
+            this.button_get_patient.Location = new System.Drawing.Point(8, 18);
+            this.button_get_patient.Name = "button_get_patient";
+            this.button_get_patient.Size = new System.Drawing.Size(75, 23);
+            this.button_get_patient.TabIndex = 0;
+            this.button_get_patient.Text = "刷新";
+            this.button_get_patient.UseVisualStyleBackColor = true;
+            this.button_get_patient.Click += new System.EventHandler(this.button_get_patient_Click);
             // 
             // statusStrip1
             // 
@@ -202,21 +251,6 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(167, 20);
             this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
             // 
-            // treeView_dept
-            // 
-            this.treeView_dept.Location = new System.Drawing.Point(848, 37);
-            this.treeView_dept.Name = "treeView_dept";
-            this.treeView_dept.Size = new System.Drawing.Size(388, 591);
-            this.treeView_dept.TabIndex = 10;
-            // 
-            // textBox_hos_detail
-            // 
-            this.textBox_hos_detail.Location = new System.Drawing.Point(512, 37);
-            this.textBox_hos_detail.Multiline = true;
-            this.textBox_hos_detail.Name = "textBox_hos_detail";
-            this.textBox_hos_detail.Size = new System.Drawing.Size(330, 591);
-            this.textBox_hos_detail.TabIndex = 11;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -230,6 +264,8 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -255,6 +291,9 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.TreeView treeView_dept;
         private System.Windows.Forms.TextBox textBox_hos_detail;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.Button button_get_patient;
+        private System.Windows.Forms.TextBox textBox_patient_list;
     }
 }
 
