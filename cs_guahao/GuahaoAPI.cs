@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -11,7 +12,21 @@ namespace cs_guahao
 {
     class GuahaoAPI
     {
-        private string cookie = "bT1meiR457AESXsXtcrsCdmkzy7FkvDfUgMLrA..";
+        private string cookie; //= "bT1meiR457AESXsXtcrsCdmkzy7FkvDfUgMLrA..";
+
+        
+
+
+        public GuahaoAPI(string cookie)
+        {
+            this.cookie = cookie;
+        }
+
+        public void set_cookie(string c)
+        {
+            this.cookie = c;
+        }
+
 
         /// <summary>
         /// 医院查询
@@ -32,7 +47,7 @@ namespace cs_guahao
             HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(url);
 
             myRequest.Headers.Add("Request-Source", "PC");
-            myRequest.UserAgent = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36";            myRequest.Referer = "https://webstatic.mihoyo.com/app/community-game-records/index.html?v=6";
+            myRequest.UserAgent = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36";
             myRequest.Accept = "application/json, text/plain, */*";
             myRequest.Referer = "https://www.114yygh.com/";
             myRequest.Method = "GET";
@@ -59,8 +74,7 @@ namespace cs_guahao
             HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(url);
 
             myRequest.Headers.Add("Request-Source", "PC");
-            myRequest.UserAgent = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36"; myRequest.Referer = "https://webstatic.mihoyo.com/app/community-game-records/index.html?v=6";
-            myRequest.Accept = "application/json, text/plain, */*";
+            myRequest.UserAgent = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36"; 
             myRequest.Referer = string.Format("https://www.114yygh.com/hospital/{0}/home", hosCode);
             myRequest.Method = "GET";
 
@@ -86,7 +100,7 @@ namespace cs_guahao
             HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(url);
 
             myRequest.Headers.Add("Request-Source", "PC");
-            myRequest.UserAgent = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36"; myRequest.Referer = "https://webstatic.mihoyo.com/app/community-game-records/index.html?v=6";
+            myRequest.UserAgent = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36";
             myRequest.Accept = "application/json, text/plain, */*";
             myRequest.Referer = string.Format("https://www.114yygh.com/hospital/{0}/home", hosCode);
             myRequest.Method = "GET";
@@ -111,7 +125,7 @@ namespace cs_guahao
             HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(url);
 
             myRequest.Headers.Add("Request-Source", "PC");
-            myRequest.UserAgent = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36"; myRequest.Referer = "https://webstatic.mihoyo.com/app/community-game-records/index.html?v=6";
+            myRequest.UserAgent = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36"; 
             myRequest.Accept = "application/json, text/plain, */*";
             myRequest.Referer = string.Format("https://www.114yygh.com/hospital/{0}/notice", hosCode);
             myRequest.Method = "GET";
@@ -137,12 +151,12 @@ namespace cs_guahao
             HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(url);
 
             myRequest.Headers.Add("Request-Source", "PC");
-            myRequest.UserAgent = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36"; myRequest.Referer = "https://webstatic.mihoyo.com/app/community-game-records/index.html?v=6";
+            myRequest.UserAgent = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36";
             myRequest.Accept = "application/json, text/plain, */*";
             myRequest.Referer = "https://www.114yygh.com/personal/patient";
             myRequest.Method = "GET";
 
-            myRequest.Headers.Add("Cookie", "cmi-user-ticket=0ITQ7-jThJzzBx_KyFXMIpYgRpwzkLQtvTU7Hg..");
+            myRequest.Headers.Add("Cookie", "cmi-user-ticket=" + this.cookie);
 
             HttpWebResponse myResponse = (HttpWebResponse)myRequest.GetResponse();
             StreamReader reader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8);
@@ -152,7 +166,11 @@ namespace cs_guahao
             return JsonMapper.ToObject(content);
         }
 
-
+        /// <summary>
+        /// 订单列表
+        /// </summary>
+        /// <param name="idCardNo"></param>
+        /// <returns></returns>
         public JsonData order_list(string idCardNo)
         {
             string url = string.Format("https://www.114yygh.com/web/order/list?idCardType=IDENTITY_CARD&idCardNo={0}&orderStatus=ALL&pageNo=1&pageSize=1000", idCardNo);
@@ -162,12 +180,12 @@ namespace cs_guahao
             HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(url);
 
             myRequest.Headers.Add("Request-Source", "PC");
-            myRequest.UserAgent = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36"; myRequest.Referer = "https://webstatic.mihoyo.com/app/community-game-records/index.html?v=6";
+            myRequest.UserAgent = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36"; 
             myRequest.Accept = "application/json, text/plain, */*";
             myRequest.Referer = "https://www.114yygh.com/personal/patient";
             myRequest.Method = "GET";
 
-         //   myRequest.Headers.Add("Cookie", "cmi-user-ticket=0ITQ7-jThJzzBx_KyFXMIpYgRpwzkLQtvTU7Hg..");
+            myRequest.Headers.Add("Cookie", "cmi-user-ticket=" + this.cookie);
 
             HttpWebResponse myResponse = (HttpWebResponse)myRequest.GetResponse();
             StreamReader reader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8);
@@ -175,6 +193,119 @@ namespace cs_guahao
             reader.Close();
             Console.WriteLine(content);
             return JsonMapper.ToObject(content);
+        }
+
+        /// <summary>
+        /// 日历列表
+        /// </summary>
+        /// <param name="hosCode"></param>
+        /// <param name="firstDeptCode"></param>
+        /// <param name="secondDeptCode"></param>
+        /// <returns></returns>
+        public JsonData product_list(string hosCode,string firstDeptCode,string secondDeptCode)
+        {
+            string url = "https://www.114yygh.com/web/product/list";
+
+            HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(url);
+
+            string data = "{\"firstDeptCode\":\"" + firstDeptCode + "\",\"secondDeptCode\":\"" + secondDeptCode + "\",\"hosCode\":\"" + hosCode + "\",\"week\":1}";
+            Console.WriteLine(data);
+
+
+            byte[] bs = Encoding.UTF8.GetBytes(data);
+
+            myRequest.ContentType = "application/json;charset=UTF-8";
+            myRequest.Headers.Add("Request-Source", "PC");
+            myRequest.UserAgent = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36";
+            myRequest.Accept = "application/json, text/plain, */*";
+            myRequest.Referer = string.Format("https://www.114yygh.com/hospital/{0}/{1}/{2}/source", hosCode, firstDeptCode, secondDeptCode);
+            myRequest.Method = "POST";
+
+            myRequest.Headers.Add("Cookie", "cmi-user-ticket=" + this.cookie);
+            Stream reqStream = myRequest.GetRequestStream();
+            reqStream.Write(bs, 0, bs.Length);
+            reqStream.Close();
+
+            HttpWebResponse myResponse = (HttpWebResponse)myRequest.GetResponse();
+
+            StreamReader reader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8);
+            string content = reader.ReadToEnd();
+            reader.Close();
+            Console.WriteLine(content);
+            return JsonMapper.ToObject(content);
+        }
+
+        /// <summary>
+        /// 日历当天详情
+        /// </summary>
+        /// <param name="hosCode"></param>
+        /// <param name="firstDeptCode"></param>
+        /// <param name="secondDeptCode"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        public JsonData product_detail(string hosCode, string firstDeptCode, string secondDeptCode,string target)
+        {
+            string url = "https://www.114yygh.com/web/product/list";
+
+            HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(url);
+
+            string data = "{\"firstDeptCode\":\"" + firstDeptCode + "\",\"secondDeptCode\":\"" + 
+                secondDeptCode + "\",\"hosCode\":\"" + hosCode + "\",\"target\":\"" +
+                target + "\"}";
+            Console.WriteLine(data);
+
+
+            byte[] bs = Encoding.UTF8.GetBytes(data);
+
+            myRequest.ContentType = "application/json;charset=UTF-8";
+            myRequest.Headers.Add("Request-Source", "PC");
+            myRequest.UserAgent = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36";
+            myRequest.Accept = "application/json, text/plain, */*";
+            myRequest.Referer = string.Format("https://www.114yygh.com/hospital/{0}/{1}/{2}/source", hosCode, firstDeptCode, secondDeptCode);
+            myRequest.Method = "POST";
+
+            myRequest.Headers.Add("Cookie", "cmi-user-ticket=" + this.cookie);
+            Stream reqStream = myRequest.GetRequestStream();
+            reqStream.Write(bs, 0, bs.Length);
+            reqStream.Close();
+
+            HttpWebResponse myResponse = (HttpWebResponse)myRequest.GetResponse();
+
+            StreamReader reader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8);
+            string content = reader.ReadToEnd();
+            reader.Close();
+            Console.WriteLine(content);
+            return JsonMapper.ToObject(content);
+        }
+
+        /// <summary>
+        /// 获取验证码图片
+        /// </summary>
+        public static Image getImgCode()
+        {
+            string url = "https://www.114yygh.com/web/img/getImgCode";
+
+            Console.WriteLine(url);
+
+            HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(url);
+
+            myRequest.Headers.Add("Request-Source", "PC");
+            myRequest.UserAgent = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36";
+            myRequest.Accept = "application/json, text/plain, */*";
+            myRequest.Referer = "https://www.114yygh.com";
+            myRequest.Method = "GET";
+
+            try
+            {
+                HttpWebResponse myResponse = (HttpWebResponse)myRequest.GetResponse();
+                Stream stream = myResponse.GetResponseStream();
+                Image image = Image.FromStream(stream);
+                return image;
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
         }
     }
 }
