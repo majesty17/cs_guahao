@@ -25,5 +25,21 @@ namespace cs_guahao
                 pictureBox_login_img.Image = img;
             }
         }
+
+        /// <summary>
+        /// 获取验证码
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button_get_code_Click(object sender, EventArgs e)
+        {
+            string phone = textBox_phone.Text.Trim();
+            if(phone.Length!= 11 || phone.StartsWith("1") == false)
+            {
+                MessageBox.Show("请输入正确的手机号!");
+                return;
+            }
+
+        }
     }
 }

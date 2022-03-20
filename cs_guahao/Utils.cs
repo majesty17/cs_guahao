@@ -15,10 +15,11 @@ namespace cs_guahao
         public static JsonData loadConfig()
         {
             string path = System.AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "/" + configFile;
+            JsonData ret = new JsonData();
+
             try
             {
                 string[] lines = File.ReadAllLines(path);
-                JsonData ret = new JsonData();
                 foreach (string line in lines)
                 {
                     string[] l = line.Trim().Split(new char[] { '=' });
@@ -27,14 +28,12 @@ namespace cs_guahao
                         ret[l[0].Trim()] = l[1].Trim();
                     }
                 }
-
-                return ret;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("load no config error!" + ex.Message);
-                return null;
             }
+            return ret;
         }
 
         //保存用户输入的config
