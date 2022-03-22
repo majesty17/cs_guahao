@@ -278,34 +278,6 @@ namespace cs_guahao
             return JsonMapper.ToObject(content);
         }
 
-        /// <summary>
-        /// 获取验证码图片
-        /// </summary>
-        public static Image getImgCode()
-        {
-            string url = "https://www.114yygh.com/web/img/getImgCode";
 
-            Console.WriteLine(url);
-
-            HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(url);
-
-            myRequest.Headers.Add("Request-Source", "PC");
-            myRequest.UserAgent = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36";
-            myRequest.Accept = "application/json, text/plain, */*";
-            myRequest.Referer = "https://www.114yygh.com";
-            myRequest.Method = "GET";
-
-            try
-            {
-                HttpWebResponse myResponse = (HttpWebResponse)myRequest.GetResponse();
-                Stream stream = myResponse.GetResponseStream();
-                Image image = Image.FromStream(stream);
-                return image;
-            }
-            catch(Exception ex)
-            {
-                return null;
-            }
-        }
     }
 }

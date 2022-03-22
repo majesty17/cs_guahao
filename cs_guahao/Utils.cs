@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -55,5 +56,24 @@ namespace cs_guahao
                 Console.WriteLine("写入cookie失败！");
             }
         }
+        /// <summary>
+        /// aes加密
+        /// </summary>
+        /// <param name="plaintext"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static string AESEncrypt(string plaintext,string key)
+        {
+            byte[] keyArray = UTF8Encoding.UTF8.GetBytes(key);
+            byte[] toEncryptArray = UTF8Encoding.UTF8.GetBytes(plaintext);
+            RijndaelManaged rDel = new RijndaelManaged();
+            rDel.Key = keyArray;
+            rDel.Mode = CipherMode.ECB;
+            rDel.Padding = PaddingMode.PKCS7;
+            ICryptoTransform cTransform = rDel.CreateEncryptor();
+            byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
+            return Convert.ToBase64String(resultArray, 0, resultArray.Length);
+        }
+
     }
 }

@@ -188,7 +188,7 @@ namespace cs_guahao
             }
             catch(Exception ex)
             {
-                Login login = new Login();
+                Login_Form login = new Login_Form(config["aes_key"].ToString(), config["phone"].ToString());
                 login.ShowDialog(this);
                 set_status("获取就诊人失败:" + ex.Message);
             }
