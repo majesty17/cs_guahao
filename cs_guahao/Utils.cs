@@ -1,6 +1,7 @@
 ﻿using LitJson;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -75,5 +76,18 @@ namespace cs_guahao
             return Convert.ToBase64String(resultArray, 0, resultArray.Length);
         }
 
+        public static string get_cal_status(string status, ref Color col)
+        {
+            if (status == "NO_INVENTORY")
+            {  col = Color.Gray; return "无号"; }
+            if (status == "AVAILABLE")
+            { col = Color.Green; return "有号";  }
+            if (status == "SOLD_OUT")
+            { col = Color.Red; return "挂满"; }
+            if (status == "TOMORROW_OPEN")
+            { col = Color.Yellow; return "等待放号";  }
+            col = Color.White;
+            return string.Empty;
+        }
     }
 }

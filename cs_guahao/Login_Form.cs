@@ -82,11 +82,22 @@ namespace cs_guahao
         /// <param name="e"></param>
         private void button_login_Click(object sender, EventArgs e)
         {
-            string code = textBox_img_code.Text.Trim();
+            string code = textBox_sms_code.Text.Trim();  //textBox_img_code.Text.Trim(); sms code ! not pic code!
 
-            string encode_phone = Utils.AESEncrypt(phone, key).Replace("=", "%3D").Replace("+", "-");
-            string encode_code= Utils.AESEncrypt(phone, code).Replace("=", "%3D").Replace("+", "-");
-            MessageBox.Show(encode_phone);
+            string encode_phone = Utils.AESEncrypt(phone, key).Replace("+", "-");
+            string encode_code= Utils.AESEncrypt(code, key).Replace("+", "-");
+            Console.Out.WriteLine(encode_phone + "\n" + encode_code);
+            string cookie = guahaoLogin.login(encode_phone, encode_code);
+            if (cookie == string.Empty)
+            {
+                MessageBox.Show("登录失败!");
+            }
+            else
+            {
+                MessageBox.Show("登录成功.");
+                ((Form_Main)this.Owner).config["cookie"] = cookie;
+                this.Close();
+            }
 
         }
 

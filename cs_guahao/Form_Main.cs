@@ -10,13 +10,13 @@ using System.Windows.Forms;
 using LitJson;
 namespace cs_guahao
 {
-    public partial class Form1 : Form
+    public partial class Form_Main : Form
     {
 
         private GuahaoAPI guahao;
-        private JsonData config;
+        public JsonData config;
 
-        public Form1()
+        public Form_Main()
         {
             InitializeComponent();
         }
@@ -33,7 +33,7 @@ namespace cs_guahao
             //尝试获取本地配置
             config = Utils.loadConfig();
             //初始化挂号对象
-            guahao = new GuahaoAPI(textBox_conf_cookie.Text.Trim());
+            guahao = new GuahaoAPI(config["cookie"].ToString());
 
             //应用配置到主体
             config_apply();
@@ -168,7 +168,7 @@ namespace cs_guahao
         /// <param name="e"></param>
         private void button_get_patient_Click(object sender, EventArgs e)
         {
-
+            guahao.set_cookie(config["cookie"].ToString());
             JsonData data = guahao.patient_list();
             listView_patient_list.Items.Clear();
             try
@@ -189,6 +189,7 @@ namespace cs_guahao
             catch(Exception ex)
             {
                 Login_Form login = new Login_Form(config["aes_key"].ToString(), config["phone"].ToString());
+                login.Owner = this;
                 login.ShowDialog(this);
                 set_status("获取就诊人失败:" + ex.Message);
             }
@@ -198,32 +199,36 @@ namespace cs_guahao
 
 
         /// <summary>
-        /// 自动更新cookie
+        /// 选中门诊node
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void textBox_conf_cookie_TextChanged(object sender, EventArgs e)
-        {
-            config["cookie"] = textBox_conf_cookie.Text.Trim();
-            guahao.set_cookie(config["cookie"].ToString());
-        }
-
-        /// <summary>
-        /// 双击门诊node
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void treeView_dept_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void treeView_dept_AfterSelect(object sender, TreeViewEventArgs e)
         {
             TreeNode node = treeView_dept.SelectedNode;
 
-            if (node != null && node.Tag != null && node.Tag!=null)
+            if (node != null && node.Tag != null && node.Tag != null)
             {
                 JsonData tag = (JsonData)node.Tag;
                 string hoscode = treeView_dept.Tag.ToString();
                 string code1 = tag["dept1Code"].ToString();
                 string code2 = tag["code"].ToString();
                 JsonData data = guahao.product_list(hoscode, code1, code2);
+
+                listView_calendars.Items.Clear();
+                foreach (JsonData line in data["data"]["calendars"])
+                {
+                    ListViewItem lvi = new ListViewItem(line["dutyDate"].ToString());
+                    lvi.SubItems.Add(line["weekDesc"].ToString());
+                    Color col = new Color();
+                    string status = Utils.get_cal_status(line["status"].ToString(), ref col);
+
+                    lvi.SubItems.Add(status);
+                    lvi.Tag = line["status"].ToString(); //待定
+                    listView_calendars.Items.Add(lvi);
+                    lvi.BackColor = col;
+
+                }
             }
         }
 
@@ -232,7 +237,6 @@ namespace cs_guahao
         /// </summary>
         private void rewrite_config()
         {
-            config["cookie"] = textBox_conf_cookie.Text.Trim();
             config["hos_area"] = comboBox_area.SelectedIndex;
             config["hos_level"] = comboBox_level.SelectedIndex;
             config["hos_kw"] = textBox_kw.Text.Trim();
@@ -243,8 +247,7 @@ namespace cs_guahao
         /// </summary>
         private void config_apply()
         {
-            if (config.Keys.Contains("cookie"))
-                textBox_conf_cookie.Text = config["cookie"].ToString();
+
             if (config.Keys.Contains("hos_area"))
                 comboBox_area.SelectedIndex = int.Parse(config["hos_area"].ToString()) % comboBox_area.Items.Count;
             if (config.Keys.Contains("hos_level"))
@@ -283,5 +286,7 @@ namespace cs_guahao
                 }
             }
         }
+
+
     }
 }

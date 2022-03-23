@@ -120,7 +120,6 @@ namespace cs_guahao
             HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(url);
 
             myRequest.Headers.Add("Request-Source", "PC");
-            //myRequest.Headers.Add("imed_session_tm", imed_session_tm1);//很重要
             myRequest.Headers.Add("Cookie", string.Format("imed_session={0}; agent_login_img_code={1}; imed_session_tm={2}",
                 imed_session2, agent_login_img_code, imed_session_tm2));
             myRequest.UserAgent = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36";
@@ -151,10 +150,47 @@ namespace cs_guahao
         }
 
 
-
+        
         public string login(string phone,string code)
         {
-            return "";
+            string url = "https://www.114yygh.com/web/login";
+
+            HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(url);
+
+            string data = "{\"mobile\":\"" + phone + "\",\"code\":\"" +
+                code + "\"}";
+            Console.WriteLine(data);
+
+
+            byte[] bs = Encoding.UTF8.GetBytes(data);
+            try
+            {
+                myRequest.ContentType = "application/json;charset=UTF-8";
+                myRequest.Headers.Add("Request-Source", "PC");
+                myRequest.UserAgent = "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36";
+                myRequest.Accept = "application/json, text/plain, */*";
+                myRequest.Referer = "https://www.114yygh.com/hospital/H40102867X/home";
+                myRequest.Method = "POST";
+
+                myRequest.Headers.Add("Cookie", string.Format("imed_session={0}; agent_login_img_code={1}; imed_session_tm={2}",
+                    imed_session2, agent_login_img_code, imed_session_tm2));
+                Stream reqStream = myRequest.GetRequestStream();
+                reqStream.Write(bs, 0, bs.Length);
+                reqStream.Close();
+
+                HttpWebResponse myResponse = (HttpWebResponse)myRequest.GetResponse();
+
+                StreamReader reader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8);
+                string content = reader.ReadToEnd();
+                reader.Close();
+                Console.WriteLine(content);
+                return CookieHelper.GetCookieValueByName(myResponse.Headers["Set-Cookie"], "cmi-user-ticket");
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return string.Empty;
+            }
         }
     }
 }
